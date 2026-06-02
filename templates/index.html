@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Google Cloud Summit 2026 — Build Smarter. Scale Faster. Go Further. Join us on June 2, 2026 at Moscone Center West, San Francisco." />
+  <title>Google Cloud Summit 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav-bar" role="banner">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Google Cloud Summit 2026 home">
+      <svg class="gcloud-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="20" cy="20" r="20" fill="url(#gcloudGrad)"/>
+        <path d="M28 18.5a8 8 0 1 0-8 8v-4a4 4 0 1 1 4-4h4z" fill="white"/>
+        <defs>
+          <linearGradient id="gcloudGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4285F4"/>
+            <stop offset="0.5" stop-color="#0F9D58" />
+            <stop offset="1" stop-color="#FBBC04"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Google Cloud Summit <strong>2026</strong></span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#schedule" class="nav-link">Schedule</a>
+      <a href="#talks" class="nav-link">Talks</a>
+      <a href="#speakers" class="nav-link">Speakers</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home" aria-label="Event hero">
+  <div class="hero-bg-grid" aria-hidden="true"></div>
+  <div class="hero-orbs" aria-hidden="true">
+    <div class="orb orb-blue"></div>
+    <div class="orb orb-green"></div>
+    <div class="orb orb-yellow"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>Live Event — {{ event.date }}</span>
+    </div>
+    <h1 class="hero-title">{{ event.name }}</h1>
+    <p class="hero-tagline">{{ event.tagline }}</p>
+    <div class="hero-meta">
+      <div class="meta-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        {{ event.date }}
+      </div>
+      <div class="meta-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        {{ event.location }}
+      </div>
+      <div class="meta-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        9:00 AM – 9:00 PM
+      </div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#schedule" class="btn btn-primary" id="hero-schedule-btn">View Schedule</a>
+      <a href="#talks" class="btn btn-outline" id="hero-talks-btn">Explore Talks</a>
+    </div>
+    <!-- Today's date chip -->
+    <p class="hero-today">Today is <strong id="today-date">{{ today }}</strong></p>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<section class="stats-bar" aria-label="Event statistics">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-number">11</span>
+      <span class="stat-label">Expert Talks</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">{{ speakers | length }}</span>
+      <span class="stat-label">Speakers</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">2</span>
+      <span class="stat-label">Categories</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">1</span>
+      <span class="stat-label">Epic Day</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHEDULE ===== -->
+<section class="section schedule-section" id="schedule">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Full Day Programme</span>
+      <h2 class="section-title">Event Schedule</h2>
+      <p class="section-sub">All times are Pacific Time (PT). Sessions are held across three rooms.</p>
+    </div>
+
+    <div class="timeline" role="list">
+      {% for item in schedule_items %}
+        {% if item.type == 'session' %}
+          <article class="timeline-item timeline-talk" role="listitem"
+                   data-category="{{ item.talk.category }}"
+                   data-talk-id="{{ item.talk.id }}">
+            <div class="timeline-time">
+              <span class="time-start">{{ item.time_start }}</span>
+              <span class="time-sep">–</span>
+              <span class="time-end">{{ item.time_end }}</span>
+            </div>
+            <div class="timeline-connector" aria-hidden="true">
+              <div class="connector-dot cat-{{ item.talk.category }}"></div>
+              <div class="connector-line"></div>
+            </div>
+            <div class="timeline-card cat-border-{{ item.talk.category }}">
+              <div class="card-header-row">
+                <span class="cat-badge cat-{{ item.talk.category }}">{{ item.talk.category_name }}</span>
+                <span class="room-badge">{{ item.talk.room }}</span>
+              </div>
+              <h3 class="card-title">
+                <a href="/talk/{{ item.talk.id }}" class="card-title-link" id="schedule-talk-{{ item.talk.id }}">{{ item.talk.title }}</a>
+              </h3>
+              <p class="card-desc">{{ item.talk.description[:160] }}…</p>
+              <div class="card-speakers">
+                {% for speaker in item.talk.speakers %}
+                  <div class="speaker-chip">
+                    <div class="avatar-sm" style="background:{{ speaker.avatar_color }}" aria-hidden="true">{{ speaker.avatar_initials }}</div>
+                    <span>{{ speaker.first_name }} {{ speaker.last_name }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </article>
+        {% elif item.type == 'lunch' %}
+          <div class="timeline-item timeline-lunch" role="listitem">
+            <div class="timeline-time">
+              <span class="time-start">{{ item.time_start }}</span>
+              <span class="time-sep">–</span>
+              <span class="time-end">{{ item.time_end }}</span>
+            </div>
+            <div class="timeline-connector" aria-hidden="true">
+              <div class="connector-dot connector-lunch"></div>
+              <div class="connector-line"></div>
+            </div>
+            <div class="timeline-break-card timeline-break-lunch">
+              <span class="break-icon" aria-hidden="true">🍽️</span>
+              <div>
+                <strong>{{ item.label }}</strong>
+                <span class="break-dur">60 min</span>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="timeline-item timeline-break" role="listitem">
+            <div class="timeline-time">
+              <span class="time-start">{{ item.time_start }}</span>
+              <span class="time-sep">–</span>
+              <span class="time-end">{{ item.time_end }}</span>
+            </div>
+            <div class="timeline-connector" aria-hidden="true">
+              <div class="connector-dot connector-break"></div>
+              <div class="connector-line"></div>
+            </div>
+            <div class="timeline-break-card">
+              <span class="break-icon" aria-hidden="true">☕</span>
+              <strong>{{ item.label }}</strong>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== TALKS SEARCH & GRID ===== -->
+<section class="section talks-section" id="talks">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Explore</span>
+      <h2 class="section-title">All Talks</h2>
+      <p class="section-sub">Search by title, speaker name, or category.</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar" role="search">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="search" id="search-input" class="search-input"
+               placeholder="Search talks, speakers…"
+               aria-label="Search talks and speakers"
+               autocomplete="off" />
+        <button class="search-clear" id="search-clear" aria-label="Clear search" hidden>✕</button>
+      </div>
+      <div class="filter-pills" role="group" aria-label="Filter by category">
+        <button class="pill pill-active" data-cat="" id="filter-all">All</button>
+        {% for cat_id, cat_name in categories.items() %}
+          <button class="pill" data-cat="{{ cat_id }}" id="filter-cat-{{ cat_id }}">{{ cat_name }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <p class="results-count" id="results-count" aria-live="polite"></p>
+
+    <!-- Talk Cards Grid -->
+    <div class="talks-grid" id="talks-grid" role="list">
+      {% for talk in talks %}
+        <article class="talk-card" role="listitem"
+                 data-category="{{ talk.category }}"
+                 data-id="{{ talk.id }}">
+          <div class="talk-card-top">
+            <div class="talk-card-meta">
+              <span class="cat-badge cat-{{ talk.category }}">{{ talk.category_name }}</span>
+              <span class="talk-time-badge">{{ talk.time_start }} – {{ talk.time_end }}</span>
+            </div>
+            <span class="room-tag">{{ talk.room }}</span>
+          </div>
+          <h3 class="talk-title">
+            <a href="/talk/{{ talk.id }}" class="talk-title-link" id="talk-card-{{ talk.id }}">{{ talk.title }}</a>
+          </h3>
+          <p class="talk-desc">{{ talk.description[:180] }}…</p>
+          <div class="talk-speakers">
+            {% for speaker in talk.speakers %}
+              <div class="speaker-row">
+                <div class="avatar-md" style="background:{{ speaker.avatar_color }}" aria-hidden="true">{{ speaker.avatar_initials }}</div>
+                <div class="speaker-info">
+                  <span class="speaker-name">{{ speaker.first_name }} {{ speaker.last_name }}</span>
+                  <span class="speaker-role">{{ speaker.title }} · {{ speaker.company }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <a href="/talk/{{ talk.id }}" class="talk-cta" id="talk-detail-{{ talk.id }}">Read more →</a>
+        </article>
+      {% endfor %}
+    </div>
+
+    <p class="no-results" id="no-results" hidden>No talks match your search. Try a different keyword or category.</p>
+  </div>
+</section>
+
+<!-- ===== SPEAKERS ===== -->
+<section class="section speakers-section" id="speakers">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Who's Speaking</span>
+      <h2 class="section-title">Speakers</h2>
+      <p class="section-sub">World-class engineers and technologists from leading companies.</p>
+    </div>
+    <div class="speakers-grid">
+      {% for speaker in speakers %}
+        <div class="speaker-card" id="speaker-{{ speaker.id }}">
+          <div class="speaker-avatar" style="background: {{ speaker.avatar_color }}">{{ speaker.avatar_initials }}</div>
+          <h3 class="speaker-full-name">{{ speaker.first_name }} {{ speaker.last_name }}</h3>
+          <p class="speaker-title-company">{{ speaker.title }}</p>
+          <p class="speaker-company-tag">{{ speaker.company }}</p>
+          <a href="{{ speaker.linkedin }}" target="_blank" rel="noopener noreferrer"
+             class="linkedin-btn" id="linkedin-{{ speaker.id }}"
+             aria-label="View {{ speaker.first_name }} {{ speaker.last_name }} on LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg class="gcloud-icon-sm" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="20" cy="20" r="20" fill="url(#gcloudGradF)"/>
+        <path d="M28 18.5a8 8 0 1 0-8 8v-4a4 4 0 1 1 4-4h4z" fill="white"/>
+        <defs>
+          <linearGradient id="gcloudGradF" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4285F4"/>
+            <stop offset="0.5" stop-color="#0F9D58" />
+            <stop offset="1" stop-color="#FBBC04"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Google Cloud Summit 2026</span>
+    </div>
+    <p class="footer-venue">{{ event.address }}</p>
+    <p class="footer-contact">Questions? Email us at <a href="mailto:{{ event.registration_email }}">{{ event.registration_email }}</a></p>
+    <p class="footer-copy">&copy; 2026 Google Cloud Summit. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

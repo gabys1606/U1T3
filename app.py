@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 
 def _build_schedule_items():
-    """Build a full schedule list with enriched talk data merged in."""
+    """Build a full schedule list."""
     speaker_map = get_speaker_map()
     talk_map = get_talk_map()
     enriched_talk_map = {t["id"]: t for t in enrich_talks(list(talk_map.values()), speaker_map)}
